@@ -7,7 +7,7 @@
 #include "grok_pilot_glue.h"
 
 #if defined(CORE_TEENSY41)
-#include "grok_pilot/proposal.h"
+#include "src/grok_pilot/proposal.h"
 
 #ifndef GROK_PILOT_ENGINE_ID
 #define GROK_PILOT_ENGINE_ID 0   // 0 = port, 1 = starboard; set per ECU with -DGROK_PILOT_ENGINE_ID=1
