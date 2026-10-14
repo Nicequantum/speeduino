@@ -18,6 +18,7 @@ A full copy of the license may be found in the projects root directory
 #include "page_crc.h"
 #include "logger.h"
 #include "comms_legacy.h"
+#include "grok_pilot_glue.h"
 #include "src/FastCRC/FastCRC.h"
 #include <avr/pgmspace.h>
 #ifdef RTC_ENABLED
@@ -729,6 +730,12 @@ void processSerialCommand(void)
       sendSerialPayloadNonBlocking(length + 1U);
       break;
     }
+
+#if defined(CORE_TEENSY41)
+    case 'Y': // Grok Pilot AI map-write proposal (ahanu-ecu docs/PROPOSAL-WIRE-PROTOCOL.md). RAM only, never burns.
+      sendSerialPayloadNonBlocking(grokPilotHandleProposal(serialPayload, serialPayloadLength));
+      break;
+#endif
 
     case 'Q': // send code version
       (void)memcpy_P(serialPayload, codeVersion, sizeof(codeVersion) );

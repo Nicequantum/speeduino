@@ -1,0 +1,13 @@
+name: grok-pilot-tests
+on:
+  push:
+    branches: [grok-pilot, 'feat/**']
+  pull_request:
+    branches: [grok-pilot]
+jobs:
+  proposal-native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y cmake g++ libgtest-dev
+      - run: cmake -S test/grok_pilot_native -B build/gp && cmake --build build/gp -j && ctest --test-dir build/gp --output-on-failure
