@@ -1,0 +1,17 @@
+# Desktop tests for the Grok Pilot proposal path (no Arduino / Speeduino globals).
+cmake_minimum_required(VERSION 3.16)
+project(grok_pilot_proposal_tests CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(GTest REQUIRED)
+enable_testing()
+set(GP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../speeduino/grok_pilot)
+add_executable(proposal_tests test_proposal.cpp ${GP_DIR}/proposal.cpp)
+target_include_directories(proposal_tests PRIVATE ${GP_DIR})
+target_compile_options(proposal_tests PRIVATE -Wall -Wextra -Werror -ffp-contract=off)
+target_link_libraries(proposal_tests PRIVATE GTest::gtest_main)
+# Pure module must also build without exceptions/RTTI.
+add_library(proposal_nofx OBJECT ${GP_DIR}/proposal.cpp)
+target_include_directories(proposal_nofx PRIVATE ${GP_DIR})
+target_compile_options(proposal_nofx PRIVATE -Wall -Wextra -Werror -fno-exceptions -fno-rtti)
+include(GoogleTest)
+gtest_discover_tests(proposal_tests)
